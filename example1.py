@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 import numpy as np
 
+from src.evaluate_auc import calc_tpr_fpr
+
 np.random.seed(2021)
 
 N = 1000
@@ -71,15 +73,6 @@ test_roc_ax.annotate(f'90% sensitivity\n'
                     arrowprops=dict(facecolor='black', shrink=0.01, width=1))
 test_roc_ax.set_ylabel('Sensitivity')
 test_roc_ax.set_xlabel('1-Specificity')
-
-def calc_tpr_fpr(pred, ground_truth, th):
-    tp = np.sum(pred[ground_truth == 1] >= th)
-    tn = np.sum(pred[ground_truth == 0] < th)
-    fp = np.sum(pred[ground_truth == 0] >= th)
-    fn = np.sum(pred[ground_truth == 1] < th)
-    fpr = fp / (fp + tn)
-    tpr = tp / (tp + fn)
-    return fpr, tpr
 
 
 def roc_drift(ax, ground_truth, test_set_prediction, val_set_thresholds, val_set_fpr, val_set_tpr):

@@ -19,3 +19,11 @@ We show two models, Initially it seems that Model 1 is far better, offering ROC 
 However, evaluating the robustness to uniform noise shows Model 2 is more robust
 
 ![Example2](https://github.com/alonhzn/testAUC/blob/main/images/example2.png?raw=true)
+
+Example 3: [example3.py](https://github.com/alonhzn/testAUC/blob/main/example3.py "example3.py")
+
+Demonstrates a measure of DRIFT between the validation set and the test set
+We show two models, both of them "happen" to have the exact same AUC on the validation and test sets.
+However, evaluating the DRIFT of the Sensitivity/Specificity operation point reveals that Model 2 is far better
+
+![Example3](https://github.com/alonhzn/testAUC/blob/main/images/example3.png?raw=true)
