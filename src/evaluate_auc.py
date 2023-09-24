@@ -43,8 +43,8 @@ def roc_drift_score(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=
     fpr_drift = []
     for th, vfpr, vtpr in zip(thresholds_val,fpr_val, tpr_val):
         tfpr, ttpr = calc_tpr_fpr(y_score_tst, y_true_tst, th)
-        tpr_drift.append(vtpr-ttpr)
-        fpr_drift.append(vfpr-tfpr)
+        tpr_drift.append(ttpr-vtpr)
+        fpr_drift.append(tfpr-vfpr)
     l2_scores = np.linalg.norm(np.array([tpr_drift,fpr_drift]), axis=0)
     tpr_drift = np.array(tpr_drift)
     fpr_drift = np.array(fpr_drift)

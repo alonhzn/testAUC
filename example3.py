@@ -19,7 +19,7 @@ val_prediction /= np.max(val_prediction)
 test_prediction1 = np.log(val_prediction + 1)  # Simulate some model predictions on test set
 tpr_drift1, fpr_drift1, scores1, th1, result1 = roc_drift_score(truth, val_prediction, truth, test_prediction1)
 
-test_prediction2 = val_prediction/1.1 - 0.03  # Simulate some OTHER model predictions on test set
+test_prediction2 = val_prediction/1.1 + 0.2  # Simulate some OTHER model predictions on test set
 tpr_drift2, fpr_drift2, scores2, th2, result2 = roc_drift_score(truth, val_prediction, truth, test_prediction2)
 
 val_dist_ax = plt.subplot(4, 3, 1)
@@ -33,7 +33,7 @@ val_dist_ax.hist(val_prediction[:N], label='Negative Class', alpha=0.7, bins=bin
 val_dist_ax.hist(val_prediction[N:], label='Positive Class', alpha=0.7, bins=bins)
 fpr, tpr, _ = roc_curve(truth, val_prediction)
 val_dist_ax.set_title(f"Val set predictions (ROC AUC = {auc(fpr, tpr):.3f}) \nBoth models")
-val_dist_ax.set_xlim([0, 1])
+val_dist_ax.set_xlim([-0.1, 1])
 val_dist_ax.legend()
 val_dist_ax.set_xlabel('Predictions')
 val_dist_ax.set_ylabel('Frequency')
@@ -42,7 +42,7 @@ test1_dist_ax.hist(test_prediction1[:N], label='Negative Class', alpha=0.7, bins
 test1_dist_ax.hist(test_prediction1[N:], label='Positive Class', alpha=0.7, bins=bins)
 fpr, tpr, _ = roc_curve(truth, test_prediction1)
 test1_dist_ax.set_title(f"test set predictions (ROC AUC = {auc(fpr, tpr):.3f})\nModel 1")
-test1_dist_ax.set_xlim([0, 1])
+test1_dist_ax.set_xlim([-0.1, 1])
 test1_dist_ax.legend()
 test1_dist_ax.set_xlabel('Predictions')
 test1_dist_ax.set_ylabel('Frequency')
@@ -51,7 +51,7 @@ test2_dist_ax.hist(test_prediction2[:N], label='Negative Class', alpha=0.7, bins
 test2_dist_ax.hist(test_prediction2[N:], label='Positive Class', alpha=0.7, bins=bins)
 fpr, tpr, _ = roc_curve(truth, test_prediction2)
 test2_dist_ax.set_title(f"test set predictions (ROC AUC = {auc(fpr, tpr):.3f})\nModel 2")
-test2_dist_ax.set_xlim([0, 1])
+test2_dist_ax.set_xlim([-0.1, 1])
 test2_dist_ax.legend()
 test2_dist_ax.set_xlabel('Predictions')
 test2_dist_ax.set_ylabel('Frequency')
