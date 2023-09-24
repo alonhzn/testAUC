@@ -1,11 +1,9 @@
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, confusion_matrix
 import numpy as np
 
 def calc_tpr_fpr(pred, ground_truth, th):
-    tp = np.sum(pred[ground_truth == 1] >= th)
-    tn = np.sum(pred[ground_truth == 0] < th)
-    fp = np.sum(pred[ground_truth == 0] >= th)
-    fn = np.sum(pred[ground_truth == 1] < th)
+    binary_pred = pred >= th
+    tn, fp, fn, tp = confusion_matrix(ground_truth, binary_pred, labels=[0, 1]).ravel()
     fpr = fp / (fp + tn)
     tpr = tp / (tp + fn)
     return fpr, tpr
@@ -41,12 +39,13 @@ def roc_drift_score(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=
     :return: drift score - Lower is better.
     """
     fpr_val, tpr_val, thresholds_val = roc_curve(y_true_val, y_score_val, pos_label=pos_label)
-
-    scores=[]
+    tpr_drift = []
+    fpr_drift = []
     for th, vfpr, vtpr in zip(thresholds_val,fpr_val, tpr_val):
         tfpr, ttpr = calc_tpr_fpr(y_score_tst, y_true_tst, th)
-        dist = np.linalg.norm(np.array([vfpr, vtpr])-np.array([tfpr, ttpr]))
-        scores.append(dist)
-    scores = np.array(scores)
-
-    return scores, thresholds_val ,np.mean(scores)
+        tpr_drift.append(vtpr-ttpr)
+        fpr_drift.append(vfpr-tfpr)
+    l2_scores = np.linalg.norm(np.array([tpr_drift,fpr_drift]), axis=0)
+    tpr_drift = np.array(tpr_drift)
+    fpr_drift = np.array(fpr_drift)
+    return tpr_drift, fpr_drift, l2_scores, thresholds_val, np.mean(l2_scores)
