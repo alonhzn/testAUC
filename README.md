@@ -2,6 +2,12 @@
 
 Examples of the limitations of ROC AUC on a test set
 
+Example 0: [example0.py](https://github.com/alonhzn/testAUC/blob/main/example0.py "example0.py")
+
+Demonstrates how two very different predictions can result in the exact same ROC curve.
+
+![Example0](https://github.com/alonhzn/testAUC/blob/main/images/example0.png?raw=true)
+
 Example 1: [example1.py](https://github.com/alonhzn/testAUC/blob/main/example1.py "example1.py")
 
 Demonstrates the shifting of the operation point, despite the favourable AUC. 
