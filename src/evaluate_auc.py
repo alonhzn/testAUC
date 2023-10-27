@@ -30,13 +30,55 @@ def robustness_to_uniform_noise(y_true, y_score, pos_label=None):
 
 
 def roc_drift_score(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=None):
-    """
-    :param y_true_val: ground truth on validation set
-    :param y_score_val: predictions on validation set
-    :param y_true_tst: ground truth on TEST set
-    :param y_score_tst: predictions on TEST set
-    :param pos_label: positive label (default is 1)
-    :return: drift score - Lower is better.
+    """Compute Sensitivity & Specificity Drift from Validation set to Test set.
+
+    Parameters
+    ----------
+    y_true_val : array-like of shape (n_samples,)
+        True binary labels on Validation set. If labels are not either {-1, 1} or {0, 1}, then
+        pos_label should be explicitly given.
+
+    y_score_val : array-like of shape (n_samples,)
+        Target scores on Validation set, can either be probability estimates of the positive
+        class, confidence values, or non-thresholded measure of decisions
+        (as returned by "decision_function" on some classifiers).
+
+    y_true_tst : array-like of shape (n_samples,)
+        True binary labels on Test set. If labels are not either {-1, 1} or {0, 1}, then
+        pos_label should be explicitly given.
+
+    y_score_tst : array-like of shape (n_samples,)
+        Target scores on Test set, can either be probability estimates of the positive
+        class, confidence values, or non-thresholded measure of decisions
+        (as returned by "decision_function" on some classifiers).
+
+    pos_label : int, float, bool or str, default=None
+        The label of the positive class.
+        When ``pos_label=None``, if `y_true` is in {-1, 1} or {0, 1},
+        ``pos_label`` is set to 1, otherwise an error will be raised.
+
+    Returns
+    -------
+    tpr_drift : ndarray of shape (>2,)
+        the true-positive-rate (Sensitivity) drift between the validation set
+        and the test set, per given threshold.
+
+    fpr_drift : ndarray of shape (>2,)
+        the false-positive-rate (1-Specificity) drift between the validation set
+        and the test set, per given threshold.
+
+    drift : ndarray of shape (>2,)
+        the L2 distance in the sensitivity-specificity drift space between the validation set
+        and the test set, per given threshold.
+
+    thresholds_val : ndarray of shape (n_thresholds,)
+        Decreasing thresholds on the decision function used to compute
+        fpr and tpr on the Validation set. `thresholds[0]` represents no instances being predicted
+        and is arbitrarily set to `np.inf`.
+
+    mean_drift : numpy float
+        The mean of the sensitivity-specificity drift
+
     """
     fpr_val, tpr_val, thresholds_val = roc_curve(y_true_val, y_score_val, pos_label=pos_label)
     tpr_drift = []
@@ -45,7 +87,8 @@ def roc_drift_score(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=
         tfpr, ttpr = calc_tpr_fpr(y_score_tst, y_true_tst, th)
         tpr_drift.append(ttpr-vtpr)
         fpr_drift.append(tfpr-vfpr)
-    l2_scores = np.linalg.norm(np.array([tpr_drift,fpr_drift]), axis=0)
+    drift = np.linalg.norm(np.array([tpr_drift,fpr_drift]), axis=0)
     tpr_drift = np.array(tpr_drift)
     fpr_drift = np.array(fpr_drift)
-    return tpr_drift, fpr_drift, l2_scores, thresholds_val, np.mean(l2_scores)
+    mean_drift = np.mean(drift)
+    return tpr_drift, fpr_drift, drift, thresholds_val, mean_drift
