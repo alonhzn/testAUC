@@ -1,6 +1,18 @@
 # testAUC
 
-Examples of the limitations of ROC AUC on a test set
+## Quick start
+    pip install testAUC
+
+To evaluate the drift between the Validation set to the Test set use:
+```python
+from testAUC import roc_drift
+tpr_drift, fpr_drift, drift, thresholds_val, mean_drift = roc_drift(y_true_val, y_score_val, y_true_tst, y_score_tst)
+```
+ ## Motivation
+ The ROC (Receiver operating characteristic) curve is generally used for evaluation of ML/AI model 
+ performance in classification tasks. There are a number of pitfalls of using the ROC curve, 
+ some of which are outlined in example below
+
 
 Example 0: [example0.py](https://github.com/alonhzn/testAUC/blob/main/example0.py "example0.py")
 
