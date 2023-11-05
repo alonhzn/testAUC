@@ -29,7 +29,7 @@ def robustness_to_uniform_noise(y_true, y_score, pos_label=None):
     return scales, auc_gains, robustness
 
 
-def roc_drift_score(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=None):
+def roc_drift(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=None):
     """Compute Sensitivity & Specificity Drift from Validation set to Test set.
 
     Parameters

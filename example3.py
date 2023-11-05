@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 import numpy as np
-from src.evaluate_auc import roc_drift_score
+from src.testAUC.evaluate_auc import roc_drift
 
 np.random.seed(2021)
 N = 1000
@@ -17,10 +17,10 @@ val_prediction = np.concatenate((negatives, positives))
 val_prediction -= np.min(val_prediction)
 val_prediction /= np.max(val_prediction)
 test_prediction1 = np.log(val_prediction + 1)  # Simulate some model predictions on test set
-tpr_drift1, fpr_drift1, scores1, th1, result1 = roc_drift_score(truth, val_prediction, truth, test_prediction1)
+tpr_drift1, fpr_drift1, scores1, th1, result1 = roc_drift(truth, val_prediction, truth, test_prediction1)
 
 test_prediction2 = val_prediction/1.1 + 0.2  # Simulate some OTHER model predictions on test set
-tpr_drift2, fpr_drift2, scores2, th2, result2 = roc_drift_score(truth, val_prediction, truth, test_prediction2)
+tpr_drift2, fpr_drift2, scores2, th2, result2 = roc_drift(truth, val_prediction, truth, test_prediction2)
 
 val_dist_ax = plt.subplot(4, 3, 1)
 test1_dist_ax = plt.subplot(4, 3, 2)

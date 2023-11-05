@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import roc_curve, auc
-from src.evaluate_auc import robustness_to_uniform_noise
+from src.testAUC.evaluate_auc import robustness_to_uniform_noise
 
 np.random.seed(2023)
 N = 10000
