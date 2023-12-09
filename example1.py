@@ -75,7 +75,7 @@ test_roc_ax.set_ylabel('Sensitivity')
 test_roc_ax.set_xlabel('1-Specificity')
 
 
-def roc_drift(ax, ground_truth, test_set_prediction, val_set_thresholds, val_set_fpr, val_set_tpr):
+def roc_arrow_drift(ax, ground_truth, test_set_prediction, val_set_thresholds, val_set_fpr, val_set_tpr):
     i=0
     for th, vfpr, vtpr in zip(val_set_thresholds,val_set_fpr, val_set_tpr):
         if i % 40 == 0 or i>len(val_set_thresholds)-3:  # just for visualization, prune points to make the plot legible
@@ -86,7 +86,7 @@ def roc_drift(ax, ground_truth, test_set_prediction, val_set_thresholds, val_set
         i += 1
 
 test_true_roc_ax=plt.subplot(3, 1, 3)
-roc_drift(test_true_roc_ax, truth, test_prediction, validation_thresholds, val_set_fpr, val_set_tpr)
+roc_arrow_drift(test_true_roc_ax, truth, test_prediction, validation_thresholds, val_set_fpr, val_set_tpr)
 test_true_roc_ax.grid('on')
 test_true_roc_ax.set_title('True ROC drift from Validation to Test')
 fpr, tpr = calc_tpr_fpr(test_prediction, truth, validation_sens_90_th)
