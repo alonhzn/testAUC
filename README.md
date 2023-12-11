@@ -19,6 +19,14 @@ dashboard(y_true_val, y_score_val, y_true_tst, y_score_tst)
 ```
 ![Demo](https://github.com/alonhzn/testAUC/blob/main/images/demo1.png?raw=true)
 
+### Some tools included:
+* roc_drift -> Calculate the ROC drift from validation to test sets  
+* colored_roc_curve ->  Plot an ROC curve that is color coded by threshold
+* val_tst_colored_roc_curve -> Same colored ROC curve but for both val&tst sets (sharing color limits!)
+* faux_normal_predictions -> A small utility function to create fake model predictions
+* plot_predictions_hist -> Plot a histogram of predictions for the Positive and Negative classes
+* dashboard -> An All-In-One dashboard to evaluate the test performance (currently missing Robustness metric, stay tuned!) 
+
  ## Motivation
  The ROC (Receiver operating characteristic) curve is generally used for evaluation of ML/AI model 
  performance in classification tasks. There are a number of pitfalls of using the ROC curve, 
