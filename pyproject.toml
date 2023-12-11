@@ -4,7 +4,7 @@ requires = ["flit_core >=3.8.0,<4"]
 
 [project]
 name = "testAUC"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
     {name = "Alonhzn", email = "1833092+alonhzn@users.noreply.github.com"},
 ]
