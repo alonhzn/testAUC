@@ -17,10 +17,11 @@ val_prediction = np.concatenate((negatives, positives))
 val_prediction -= np.min(val_prediction)
 val_prediction /= np.max(val_prediction)
 test_prediction1 = np.log(val_prediction + 1)  # Simulate some model predictions on test set
-tpr_drift1, fpr_drift1, scores1, th1, result1 = roc_drift(truth, val_prediction, truth, test_prediction1)
+#tpr_drift, fpr_drift, drift, thresholds_val, mean_drift
+tpr_drift1, fpr_drift1, drift_scores1, th1, result1 = roc_drift(truth, val_prediction, truth, test_prediction1)
 
 test_prediction2 = val_prediction/1.1 + 0.2  # Simulate some OTHER model predictions on test set
-tpr_drift2, fpr_drift2, scores2, th2, result2 = roc_drift(truth, val_prediction, truth, test_prediction2)
+tpr_drift2, fpr_drift2, drift_scores2, th2, result2 = roc_drift(truth, val_prediction, truth, test_prediction2)
 
 val_dist_ax = plt.subplot(4, 3, 1)
 test1_dist_ax = plt.subplot(4, 3, 2)
@@ -56,8 +57,8 @@ test2_dist_ax.legend()
 test2_dist_ax.set_xlabel('Predictions')
 test2_dist_ax.set_ylabel('Frequency')
 
-drift_ax.plot(th1, scores1, label=f'Model 1 (Total Drift score = {result1:.3f}')
-drift_ax.plot(th2, scores2, label=f'Model 2 (Total Drift score = {result2:.3f}')
+drift_ax.plot(th1, drift_scores1, label=f'Model 1 (Total Drift score = {result1:.3f}')
+drift_ax.plot(th2, drift_scores2, label=f'Model 2 (Total Drift score = {result2:.3f}')
 drift_ax.legend()
 # drift_ax.set_xlabel('Operation point threshold')
 drift_ax.set_ylabel('Drift score (Lower is better)')

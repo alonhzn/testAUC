@@ -1,5 +1,7 @@
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 
 def calc_tpr_fpr(pred, ground_truth, th):
     binary_pred = pred >= th
@@ -92,3 +94,65 @@ def roc_drift(y_true_val, y_score_val, y_true_tst, y_score_tst, pos_label=None):
     fpr_drift = np.array(fpr_drift)
     mean_drift = np.mean(drift)
     return tpr_drift, fpr_drift, drift, thresholds_val, mean_drift
+
+def _get_segments(fpr, tpr):
+    points = np.array([fpr, tpr]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+    return segments
+
+def _get_lc(segments, thresholds, colormap, linewidth, color_lim):
+    lc = LineCollection(segments, cmap=colormap, norm=plt.Normalize(*color_lim))
+    lc.set_array(thresholds)
+    lc.set_linewidth(linewidth)
+    return lc
+
+def val_tst_colored_roc_curve(y_true_val, y_score_val,y_true_tst, y_score_tst, pos_label=None, axis=None, colormap='tab20', linewidth=8):
+
+    if axis is None:
+        fig, axis = plt.subplots(1, 1)
+        pltshow = True
+    else:
+        pltshow = False
+
+    color_lim = (min(y_score_val.min(), y_score_tst.min()), max(y_score_val.max(), y_score_tst.max()))
+
+    colored_roc_curve(y_true_val, y_score_val, pos_label=pos_label, label='Val Set', linestyle="-", axis=axis,
+                      color_lim=color_lim, colormap=colormap, linewidth=linewidth, colorbar=False)
+    colored_roc_curve(y_true_tst, y_score_tst, pos_label=pos_label, label='Test Set', linestyle="--", axis=axis,
+                      color_lim=color_lim, colormap=colormap, linewidth=linewidth, colorbar=True)
+
+    if pltshow:
+        plt.show()
+
+
+def colored_roc_curve(y_true, y_score, pos_label=None, label=None, linestyle="-", axis=None, color_lim=None, colormap='jet', linewidth=8, colorbar=False):
+
+    if axis is None:
+        fig, axis = plt.subplots(1, 1)
+        pltshow = True
+    else:
+        pltshow = False
+
+    fpr, tpr, thresholds = roc_curve(y_true, y_score, pos_label=pos_label)
+    thresholds = thresholds[thresholds != np.inf]
+    if color_lim is None:
+        color_lim = (thresholds.min(), thresholds.max())
+
+    segments = _get_segments(fpr, tpr)
+
+    lc = _get_lc(segments, thresholds, colormap, linewidth, color_lim)
+    axis.add_collection(lc)
+    if colorbar:
+        plt.colorbar(lc, ax=axis)
+    axis.plot(fpr, tpr, color='k', linewidth=linewidth/8, linestyle=linestyle, label=f"{label} - AUC={auc(fpr, tpr):.4f}" )
+
+    if label is not None:
+        axis.legend(loc='lower right')
+    axis.set_xlim(-0.01, 1)  # a bit wider to make space for the line colored shading
+    axis.set_ylim(0, 1.01)
+    axis.set_title(f"Threshold colored ROC")
+    axis.set_xlabel('False Positive Rate')
+    axis.set_ylabel('True Positive Rate')
+    axis.grid(color='lightgrey')
+    if pltshow:
+        plt.show()
