@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
-from src.testAUC.evaluate_auc import roc_drift, val_tst_colored_roc_curve
+from testAUC.evaluate_auc import roc_drift, val_tst_colored_roc_curve
 
 
 def faux_normal_predictions(N = 1000, std = 0.3, neg_mu=0.2, pos_mu=0.8, seed=None):
