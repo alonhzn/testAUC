@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 import numpy as np
 
-from src.testAUC.evaluate_auc import calc_tpr_fpr
+from src.testAUC.utils import calc_tpr_fpr
 
 np.random.seed(2021)
 
