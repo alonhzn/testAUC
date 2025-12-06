@@ -265,8 +265,8 @@ def plot_predictions_hist(y_true, y_score, pos_label=None, bins=30, ax=None, set
 
     pos_val_predictions = y_score[y_true == pos_label]
     neg_val_predictions = y_score[y_true != pos_label]
-    ax.hist(pos_val_predictions, label='Negative Class', alpha=0.7, bins=bins)
-    ax.hist(neg_val_predictions, label='Positive Class', alpha=0.7, bins=bins)
+    ax.hist(neg_val_predictions, label='Negative Class', alpha=0.7, bins=bins)
+    ax.hist(pos_val_predictions, label='Positive Class', alpha=0.7, bins=bins)
     fpr, tpr, _ = roc_curve(y_true, y_score)
     ax.set_title(f"{set_name} set predictions (ROCAUC = {auc(fpr, tpr):.3f})")
     ax.legend()
