@@ -56,7 +56,7 @@ class Perturbation(ABC):
         # auc_gains = [self._get_pertrubed_socre_auc(y, ŷ, σ) for σ in self.σs]
         auc_gains = np.array(auc_gains)
 
-        perturbation_auc = np.trapz(auc_gains) / len(auc_gains)
+        perturbation_auc = np.trapezoid(auc_gains) / len(auc_gains)
         return auc_gains, perturbation_auc
 
 class NoiseRobustness(Perturbation):
